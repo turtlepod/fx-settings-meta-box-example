@@ -284,8 +284,19 @@ function fx_smb_reset_settings(){
 			/* valid */
 			if( wp_verify_nonce( $nonce, 'fx-smb-reset' ) ){
 
-				/* Delete Option */
-				delete_option( 'fx_smb_basic' );
+				/**
+				 * Get all registered Option Names in current Option Group
+				 * ( thanks to @justintadlock )
+				 * @since 0.1.1
+				 * @link http://themehybrid.com/board/topics/how-to-get-all-option-name-in-option-group
+				 */
+				global $new_whitelist_options;
+				$option_names = $new_whitelist_options['fx_smb'];
+
+				/* Delete All Registered Option Names in the Group */
+				foreach( $option_names as $option_name ){
+					delete_option( $option_name );
+				}
 
 				/* Utility hook. */
 				do_action( 'fx_smb_reset' );
@@ -342,7 +353,7 @@ function fx_smb_basic_meta_box(){
 	<label for="basic-text">Basic Text Input</label>
 	<input id="basic-text" class="widefat" type="text" name="fx_smb_basic" value="<?php echo sanitize_text_field( get_option( 'fx_smb_basic', '' ) );?>">
 </p>
-<p class="howto">To display this option use PHP code<code>get_option( 'fx_smb_basic' );</code>.</p>
+<p class="howto">To display this option use PHP code <code>get_option( 'fx_smb_basic' );</code>.</p>
 <?php
 }
 
